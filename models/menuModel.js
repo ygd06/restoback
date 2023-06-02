@@ -1,28 +1,34 @@
-module.exports.createMenu = async (req, res) => {
-  try {
-    const { category, itemtype, itemname, price } = req.body;
+const mongoose = require('mongoose');
 
-    // Check if the item already exists in the menu
-  const existingItem = await Menu.findOne({ itemname });
-
-  if (existingItem) {
-    return res.status(409).json({ message: 'Item already exists in the menu' });
+const menuSchema = new mongoose.Schema({
+  category: {
+    type: String,
+    required: true
+  },
+  itemtype: {
+    type: String,
+    required: true
+  },
+  itemname: {
+    type: String,
+    required: true
+  },
+  price: {
+    type: Number,
+    required: true
+  },
+  image: {
+    filename: {
+      type: String,
+      required: true
+    },
+    path: {
+      type: String,
+      required: true
+    }
   }
+});
 
-    // Create a new menu item using the Menu model
-    const menu = new Menu({
-      category,
-      itemtype,
-      itemname,
-      price
-    });
+const Menu = mongoose.model('Menu', menuSchema);
 
-    // Save the menu item to the database
-    await menu.save();
-
-    return res.status(201).json({ message: 'Menu item created successfully' });
-  } catch (error) {
-    console.error('Error creating menu item:', error);
-    return res.status(500).json({ error: 'Internal server error' });
-  }
-};
+module.exports = Menu;
