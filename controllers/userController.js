@@ -6,6 +6,7 @@ const {User} = require('../models/userModel');
 const {Otp} = require('../models/otpModel');
 const {Menu} = require('../models/menuModel');
 const {Cart} = require('../models/cartModel');
+const {Hotel} = require('../models/hotelModel');
 
 
 //Otp
@@ -53,37 +54,70 @@ module.exports.verifyOtp = async(req,res) => {
     }
 }
 
+//Hotel
+module.exports.hotel = async (req, res) => {
+  try {
+    const {id_hotel,hotel_name,avg_time,distance,item_name,favourites,img_url,total_items } = req.body;
+
+    const existingItem = await Hotel.findOne({id_hotel});
+
+    if(existingItem){
+      return res.stuatus(409).json({message: 'Hotel already exists in the menu'});
+    }
+
+      const hotel = new Hotel ({
+        id_hotel,
+        hotel_name,
+        avg_time,
+        distance,
+        item_name,
+        favourites,
+        img_url,
+        total_items
+      })
+
+      await hotel.save();
+
+      return res.status(201).json({ message: 'Hotel created successfully' });
+    }
+  catch {
+    console.error('Error creating hotel:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 //MenuStorage
 module.exports.createMenu = async (req, res) => {
-    try {
-      const { category, itemtype, itemname, price } = req.body;
-      const {image} = req.files;
+  try {
+    const { category, itemtype, itemname, price } = req.body;
+    const { image } = req.files;
 
-      // Check if the item already exists in the menu
+    // Check if the item already exists in the menu
     const existingItem = await Menu.findOne({ itemname });
 
     if (existingItem) {
       return res.status(409).json({ message: 'Item already exists in the menu' });
     }
-  
-      // Create a new menu item using the Menu model
-      const menu = new Menu({
-        category,
-        itemtype,
-        itemname,
-        price,
-        image
-      });
-  
-      // Save the menu item to the database
-      await menu.save();
-  
-      return res.status(201).json({ message: 'Menu item created successfully' });
-    } catch (error) {
-      console.error('Error creating menu item:', error);
-      return res.status(500).json({ error: 'Internal server error' });
-    }
-  };
+
+    // Create a new menu item using the Menu model
+    const menu = new Menu({
+      category,
+      itemtype,
+      itemname,
+      price,
+      image
+    });
+
+    // Save the menu item to the database
+    await menu.save();
+
+    return res.status(201).json({ message: 'Menu item created successfully' });
+  } catch (error) {
+    console.error('Error creating menu item:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 
 //Add to cart
 module.exports.addCart = async (req,res) => {
