@@ -89,8 +89,7 @@ module.exports.hotel = async (req, res) => {
 //MenuStorage
 module.exports.createMenu = async (req, res) => {
   try {
-    const { category, itemtype, itemname, price } = req.body;
-    const { image } = req.files;
+    const { category, itemtype, itemname, price, image } = req.body;
 
     // Check if the item already exists in the menu
     const existingItem = await Menu.findOne({ itemname });
