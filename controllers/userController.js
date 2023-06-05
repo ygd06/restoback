@@ -54,7 +54,7 @@ module.exports.verifyOtp = async(req,res) => {
     }
 }
 
-//Hotel
+//Post Hotel Details
 module.exports.hotel = async (req, res) => {
   try {
     const {id_hotel,hotel_name,avg_time,distance,item_name,favourites,img_url,total_items } = req.body;
@@ -86,6 +86,43 @@ module.exports.hotel = async (req, res) => {
   }
 };
 
+//Get Hotel Details
+module.exports.getHotel = async (req, res) => {
+  try {
+    const { id_hotel } = req.query;
+
+    const hotel = await Hotel.findOne({ id_hotel });
+
+    if (!hotel) {
+      return res.status(404).json({ message: 'Hotel not found' });
+    }
+
+    return res.status(200).json({ hotel });
+  } catch (error) {
+    console.error('Error retrieving hotel:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+//Delete Hotel
+module.exports.deleteHotel = async (req, res) => {
+  try {
+    const { id_hotel } = req.query;
+
+    const deletedHotel = await Hotel.findOneAndDelete({ id_hotel });
+
+    if (!deletedHotel) {
+      return res.status(404).json({ message: 'Hotel not found' });
+    }
+
+    return res.status(200).json({ message: 'Hotel deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting hotel:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
 //MenuStorage
 module.exports.createMenu = async (req, res) => {
   try {
@@ -113,6 +150,43 @@ module.exports.createMenu = async (req, res) => {
     return res.status(201).json({ message: 'Menu item created successfully' });
   } catch (error) {
     console.error('Error creating menu item:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+//Get Menu
+module.exports.getMenu = async (req, res) => {
+  try {
+    const { itemname } = req.query;
+
+    const menuItem = await Menu.findOne({ itemname });
+
+    if (!menuItem) {
+      return res.status(404).json({ message: 'Menu item not found' });
+    }
+
+    return res.status(200).json({ menuItem });
+  } catch (error) {
+    console.error('Error retrieving menu item:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+
+//Delete Menu
+module.exports.deleteMenu = async (req, res) => {
+  try {
+    const { itemname } = req.query;
+
+    const deletedMenu = await Menu.findOneAndDelete({ itemname });
+
+    if (!deletedMenu) {
+      return res.status(404).json({ message: 'Menu not found' });
+    }
+
+    return res.status(200).json({ message: 'Menu deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting Menu:', error);
     return res.status(500).json({ error: 'Internal server error' });
   }
 };
