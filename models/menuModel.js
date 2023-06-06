@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 const {Schema, model} = require('mongoose');
 
 const menuSchema = new mongoose.Schema({
+  id_hotel: {
+    type: String,
+    required: true
+  },
   category: {
     type: String,
     required: true

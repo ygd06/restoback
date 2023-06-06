@@ -54,7 +54,7 @@ module.exports.verifyOtp = async(req,res) => {
     }
 }
 
-//Post Hotel Details
+//Post Hotel
 module.exports.hotel = async (req, res) => {
   try {
     const {id_hotel,hotel_name,avg_time,distance,item_name,favourites,img_url,total_items } = req.body;
@@ -86,7 +86,7 @@ module.exports.hotel = async (req, res) => {
   }
 };
 
-//Get Hotel Details
+//Get Hotel
 module.exports.getHotel = async (req, res) => {
   try {
     const { id_hotel } = req.query;
@@ -103,6 +103,23 @@ module.exports.getHotel = async (req, res) => {
     return res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+//Get All Hotels
+module.exports.getallhotels = async (req, res) => {
+  try {
+    const hotels = await Hotel.find();
+
+    if (!hotels || hotels.length === 0) {
+      return res.status(404).json({ message: 'No hotels found' });
+    }
+
+    return res.status(200).json({ hotels });
+  } catch (error) {
+    console.error('Error retrieving hotels:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 
 //Delete Hotel
 module.exports.deleteHotel = async (req, res) => {
@@ -123,10 +140,10 @@ module.exports.deleteHotel = async (req, res) => {
 };
 
 
-//MenuStorage
+//Post Menu
 module.exports.createMenu = async (req, res) => {
   try {
-    const { category, itemtype, itemname, price, image } = req.body;
+    const { id_hotel,category, itemtype, itemname, price, image } = req.body;
 
     // Check if the item already exists in the menu
     const existingItem = await Menu.findOne({ itemname });
@@ -137,6 +154,7 @@ module.exports.createMenu = async (req, res) => {
 
     // Create a new menu item using the Menu model
     const menu = new Menu({
+      id_hotel,
       category,
       itemtype,
       itemname,
@@ -171,6 +189,45 @@ module.exports.getMenu = async (req, res) => {
     return res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+//Get all Menu
+module.exports.getallmenu = async (req, res) => {
+  try {
+    const menuDetails = await Menu.find();
+
+    if (!menuDetails || menuDetails.length === 0) {
+      return res.status(404).json({ message: 'No menu details found' });
+    }
+
+    const hotelItems = {};
+
+    // Group menu items by id_hotel
+    menuDetails.forEach(menuItem => {
+      const { id_hotel, category, itemtype, itemname, price, image } = menuItem;
+
+      if (!hotelItems[id_hotel]) {
+        hotelItems[id_hotel] = {};
+      }
+
+      if (!hotelItems[id_hotel][category]) {
+        hotelItems[id_hotel][category] = [];
+      }
+
+      hotelItems[id_hotel][category].push({
+        itemtype,
+        itemname,
+        price,
+        image
+      });
+    });
+
+    return res.status(200).json({ hotelItems });
+  } catch (error) {
+    console.error('Error retrieving menu details:', error);
+    return res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 
 
 //Delete Menu

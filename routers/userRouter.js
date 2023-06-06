@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { signUp,verifyOtp, createMenu, addCart, hotel, getHotel, deleteHotel, getMenu, deleteMenu } = require('../controllers/userController');
+const { signUp,verifyOtp, createMenu, addCart, hotel, getHotel,getallhotels, deleteHotel, getMenu, getallmenu, deleteMenu } = require('../controllers/userController');
 
 router.route('/signup')
 .post(signUp);
@@ -15,6 +15,11 @@ router.route('/hotel')
 .post(hotel)
 .get(getHotel)
 .delete(deleteHotel);
+
+router.route('/hotel/getallhotels')
+.get(getallhotels);
+router.route('/menustore/getallmenu')
+.get(getallmenu);
 
 
 
