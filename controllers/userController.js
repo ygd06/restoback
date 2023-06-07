@@ -7,7 +7,10 @@ const {Otp} = require('../models/otpModel');
 const {Menu} = require('../models/menuModel');
 const {Cart} = require('../models/cartModel');
 const {Hotel} = require('../models/hotelModel');
+<<<<<<< HEAD
 const {Username} = require('../models/usernamemodel');
+=======
+>>>>>>> d3d25404e33ff706b692b20743a1cce8bfbb3143
 
 
 //Otp
@@ -55,6 +58,7 @@ module.exports.verifyOtp = async(req,res) => {
     }
 }
 
+<<<<<<< HEAD
 //Get name
 module.exports.username = async (req, res) => {
   try {
@@ -95,6 +99,8 @@ module.exports.getallusernames = async (req, res) => {
 };
 
 
+=======
+>>>>>>> d3d25404e33ff706b692b20743a1cce8bfbb3143
 //Post Hotel
 module.exports.hotel = async (req, res) => {
   try {
@@ -121,7 +127,11 @@ module.exports.hotel = async (req, res) => {
 
       return res.status(201).json({ message: 'Hotel created successfully' });
     }
+<<<<<<< HEAD
   catch(error) {
+=======
+  catch {
+>>>>>>> d3d25404e33ff706b692b20743a1cce8bfbb3143
     console.error('Error creating hotel:', error);
     return res.status(500).json({ error: 'Internal server error' });
   }
