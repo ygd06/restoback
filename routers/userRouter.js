@@ -1,8 +1,16 @@
 const router = require('express').Router();
 const { signUp,verifyOtp, createMenu, addCart, hotel, getHotel,getallhotels, deleteHotel, getMenu, getallmenu, deleteMenu, username, getallusernames } = require('../controllers/userController');
+const {Signup,Signin} = require('../controllers/flutterfestcontroller');
 
 router.route('/signup')
 .post(signUp);
+
+
+router.route('/festsignup')
+.post(Signup);
+router.route('/festsignin')
+.post(Signin);
+
 router.route('/signup/verify')
 .post(verifyOtp);
 router.route('/username')
