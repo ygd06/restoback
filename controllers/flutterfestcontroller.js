@@ -22,7 +22,7 @@ module.exports.Signup = async(req,res) => {
     
         const hashedPassword = await bcrypt.hash(password, 10);
     
-        const newUser = new User({
+        const newUser = new FestUser({
           username,
           email,
           password: hashedPassword
