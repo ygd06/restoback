@@ -1,12 +1,6 @@
 const {FestUser} = require('../models/flutterfestUsermodel');
 const bcrypt = require("bcrypt");
 
-function validateEmail(email) {
-    const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return pattern.test(email);
-  }
-
-
 module.exports.Signup = async(req,res) => {
     try {
         const { username,email, password } = req.body;
@@ -16,10 +10,6 @@ module.exports.Signup = async(req,res) => {
           return res.status(400).json({ error: 'Username already exists' });
         }
 
-        if (!validateEmail(email)) {
-            return res.status(400).json({ error: 'Invalid email format' });
-          }
-    
         const hashedPassword = await bcrypt.hash(password, 10);
     
         const newUser = new FestUser({
